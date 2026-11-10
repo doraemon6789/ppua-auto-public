@@ -132,7 +132,7 @@ TG_LOGIN_BATCH='+15551234567,123456:AA...bot_token,123456789,<api_id>,<api_hash>
 - 关键配置项：
   - **Resource owner**：选你自己的账号/组织（首次创建需邮件/浏览器确认批准一次）
   - **Expiration**：选 **No expiration（永不过期）**，一劳永逸，不用定期重生成
-  - **Repository access** → **Only select repositories** → 勾选 `jyucoeng/ppua-auto-private`（只需私有仓，别多授权的库）
+  - **Repository access** → **Only select repositories** → 勾选 `doraemon6789/ppua-auto-private`（只需私有仓，别多授权的库）
   - **Permissions** → **Repository permissions** → `Contents` 选 **Read and write**（检出代码 + 回写 `state/` 都需要写权限）
   - 其它保持默认即可（`Metadata: Read` 会随 Contents 自动带上）
 - 创建后把 token 复制，存进**公开仓** Secret `PRIVATE_REPO_TOKEN`（不是私有仓！workflow 在公开仓读取 secrets）
@@ -221,17 +221,17 @@ d@gmail.com,Pass4,token4,chat4#example1.pp.ua|example2.pp.ua|keep.pp.ua!example2
 
 ---
 
-## 公开仓需要设置的权限（yml 所在仓库 = `jyucoeng/ppua-auto-public`）
+## 公开仓需要设置的权限（yml 所在仓库 = `doraemon6789/ppua-auto-public`）
 
 > workflow 在**公开仓**的 Actions 上运行，所以以下几项全部在公开仓设置/生效：
 
 | # | 设置项 | 位置 | 值 / 说明 |
 |---|---|---|---|
-| 1 | **Workflow permissions** | Settings → Actions → **General → Workflow permissions** | 选 **Read and write permissions**。默认新仓库是只读（Read repository contents），会导致「提交执行时间到公开仓」一步 push 失败。直达：`https://github.com/jyucoeng/ppua-auto-public/settings/actions` |
+| 1 | **Workflow permissions** | Settings → Actions → **General → Workflow permissions** | 选 **Read and write permissions**。默认新仓库是只读（Read repository contents），会导致「提交执行时间到公开仓」一步 push 失败。直达：`https://github.com/doraemon6789/ppua-auto-public/settings/actions` |
 | 2 | **yml 内 GITHUB_TOKEN 权限** | `ppua-AutoRenew.yml` 的 `permissions:` 块 | 已内置 `contents: write` + `actions: write`（无需手动配） |
 | 3 | **Secrets** | Settings → Secrets and variables → Actions → **Secrets** | `NICUA_BATCH` / `TG_LOGIN_BATCH` / `PRIVATE_REPO_TOKEN` 等（见[总清单](#环境变量配置总清单)）。`PRIVATE_REPO_TOKEN` 必须是 Fine-grained PAT，授权私有仓 `ppua-auto-private` 的 `Contents: Read and write` |
 | 4 | **Variables** | Settings → Secrets and variables → Actions → **Variables** | `DASHBOARD_SYNC_ENABLED`、`RENEWHELPER_SYNC_ENABLED`、`SOCKS_PORT`、`APP_TIMEZONE` 等非机密配置 |
-| 5 | **检出私有仓** | yml 内 `actions/checkout` | 用 `PRIVATE_REPO_TOKEN` 检出 `jyucoeng/ppua-auto-private`，无需给公开仓开其它私有仓权限 |
+| 5 | **检出私有仓** | yml 内 `actions/checkout` | 用 `PRIVATE_REPO_TOKEN` 检出 `doraemon6789/ppua-auto-private`，无需给公开仓开其它私有仓权限 |
 
 > **私有仓 `ppua-auto-private` 不用配 Actions**：它不跑 workflow，只被公开仓检出 + 回写 `state/`（通过 `PRIVATE_REPO_TOKEN`）。
 
@@ -239,7 +239,7 @@ d@gmail.com,Pass4,token4,chat4#example1.pp.ua|example2.pp.ua|keep.pp.ua!example2
 
 1. **创建私有代码仓**：`PRIVATE_REPO_TOKEN`
    创建方法见上文（Fine-grained PAT，仅授权该私有仓，Contents Read+write），token 配置在**公开仓** Secret。
-2. **设置公开仓权限**：按上方「[公开仓需要设置的权限](#公开仓需要设置的权限yml-所在仓库--jyucoengppua-auto-public)」清单配置
+2. **设置公开仓权限**：按上方「[公开仓需要设置的权限](#公开仓需要设置的权限yml-所在仓库--doraemon6789ppua-auto-public)」清单配置
    （Workflow permissions → Read and write、Secrets、Variables；主要放在 `ppua-auto-public`）。
 3. **初始化 TG 会话（一次性，本地执行，必做）**：
    ```bash
@@ -250,4 +250,5 @@ d@gmail.com,Pass4,token4,chat4#example1.pp.ua|example2.pp.ua|keep.pp.ua!example2
 
    4、确保yml中 COLLECT_TG_FOR_DOMAIN 和 SHOW_DOMAIN_LIST都要改成true，等tg中收到域名列表的截图，这个截图的phone一栏会被正常的手机号填充，然后你自己去yml再把 COLLECT_TG_FOR_DOMAIN 改回false。
 ---
+
 
